@@ -8,8 +8,8 @@ import { SWAGGER_HOST } from './configs/constants';
 
 const doc = {
     info: {
-        title: 'Helpie App',
-        description: 'API Documentation for Helpie App',
+        title: 'Task Management API',
+        description: 'API Documentation for Task Management',
     },
     servers: [
         {
