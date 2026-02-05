@@ -1,11 +1,27 @@
-export interface GetAuthParams {}
+export interface LoginSignupResponse {
+    accessToken: string;
+    refreshToken: string;
+}
 
-export interface GetAuthQuery {}
+export interface LoginBody {
+    email: string;
+    password: string;
+}
 
-export interface CreateAuthBody {}
+export interface SignupBody extends LoginBody {
+    username: string;
+}
 
-export interface UpdateAuthParams {}
+export interface changePasswordBody {
+    oldPassword: string;
+    newPassword: string;
+}
 
-export interface UpdateAuthBody {}
+export interface forgetPasswordBody {
+    email: string;
+}
 
-export interface DeleteAuthParams {}
+export interface resetPasswordBody {
+    token: string;
+    newPassword: string;
+}

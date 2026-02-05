@@ -1,6 +1,6 @@
 import { NODE_ENV } from '@/configs/constants';
 
-export const isProd = (): boolean => NODE_ENV === 'production';
+export const isProd: boolean = NODE_ENV === 'production';
 
 interface IPagination {
     take: number;

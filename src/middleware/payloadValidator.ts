@@ -11,7 +11,7 @@ const options = {
             label: '',
         },
     },
-    allowUnknown: true,
+    allowUnknown: false,
 };
 
 const reqValidator = (validator: ObjectSchema) => {

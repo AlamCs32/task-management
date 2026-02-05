@@ -79,28 +79,28 @@ import {
     Delete${capitalizeModuleName}Params,
     Update${capitalizeModuleName}Params
 } from "./${moduleName}Type";
-import { CommonServiceResponse } from "@/types/common";
+import { ServiceResponse } from "@/types/common";
 
 export const get${capitalizeModuleName}Service = async (
     userSession: UserSessionData,
     query: Get${capitalizeModuleName}Query = {}
-): CommonServiceResponse => { };
+): ServiceResponse => { };
 
 export const create${capitalizeModuleName}Service = async (
     userSession: UserSessionData,
     body: Create${capitalizeModuleName}Body
-): CommonServiceResponse => { };
+): ServiceResponse => { };
 
 export const update${capitalizeModuleName}Service = async (
     userSession: UserSessionData,
     params: Update${capitalizeModuleName}Params,
     body: Update${capitalizeModuleName}Body
-): CommonServiceResponse => { };
+): ServiceResponse => { };
 
 export const delete${capitalizeModuleName}Service = async (
     userSession: UserSessionData,
     params: Delete${capitalizeModuleName}Params
-): CommonServiceResponse => { };
+): ServiceResponse => { };
 `.trim();
 
 const validationTemplate = `

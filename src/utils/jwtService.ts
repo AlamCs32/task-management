@@ -8,8 +8,10 @@ import {
 } from '@/configs/constants';
 import { UserSessionData } from '@/types/express';
 
+export interface TokenPayload extends Pick<UserSessionData, 'entityId' | 'entityRole'> {}
+
 export const generateAccessToken = (
-    payload: UserSessionData,
+    payload: TokenPayload,
     options = { expiresIn: JWT_SECRET_EXPIRES_IN },
 ) => {
     return jwt.sign(payload, JWT_SECRET, options as SignOptions);
@@ -20,7 +22,7 @@ export const verifyAccessToken = (token: string): UserSessionData => {
 };
 
 export const generateRefreshToken = (
-    payload: UserSessionData,
+    payload: TokenPayload,
     options = { expiresIn: REFRESH_SECRET_EXPIRES_IN },
 ) => {
     return jwt.sign(payload, REFRESH_SECRET, options as SignOptions);

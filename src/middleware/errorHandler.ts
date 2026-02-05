@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 
+import { MessageCode } from './msgs';
 import { resSend } from './responseHandler';
 
 import logger from '@/utils/logger';
@@ -24,7 +25,7 @@ const errorHandler = (
         query: req.query,
     });
 
-    resSend(res, status, message, data);
+    resSend(res, status as MessageCode, message, data);
 };
 
 export default errorHandler;

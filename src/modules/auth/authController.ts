@@ -4,27 +4,71 @@ import * as authService from './authService';
 
 import { resSend } from '@/middleware/responseHandler';
 import { StatusCode } from '@/types/common';
+import { throwCustomError } from '@/utils/customeError';
+import { isProd } from '@/utils/helper';
 
-export const getAuth = async (req: Request, res: Response) => {
-    const { userSession, query } = req;
-    const response = await authService.getAuthService(userSession, query);
-    resSend(res, StatusCode.OK, 'get auth', response);
+export const Login = async (req: Request, res: Response) => {
+    const { body } = req;
+    const { accessToken, refreshToken } = await authService.LoginService(body);
+    resSend(res, StatusCode.OK, 'Login successfully', accessToken, {
+        name: 'refreshToken',
+        value: refreshToken,
+        options: cookiesOptions,
+    });
 };
 
-export const createAuth = async (req: Request, res: Response) => {
+export const signup = async (req: Request, res: Response) => {
+    const { body } = req;
+    const { accessToken, refreshToken } = await authService.signupService(body);
+    resSend(res, StatusCode.OK, 'Signup successfully', accessToken, {
+        name: 'refreshToken',
+        value: refreshToken,
+        options: cookiesOptions,
+    });
+};
+
+export const changePassword = async (req: Request, res: Response) => {
     const { userSession, body } = req;
-    const response = await authService.createAuthService(userSession, body);
-    resSend(res, StatusCode.OK, 'create auth', response);
+    const response = await authService.changePasswordService(userSession, body);
+    resSend(res, StatusCode.OK, '', response);
 };
 
-export const updateAuth = async (req: Request, res: Response) => {
-    const { userSession, params, body } = req;
-    const response = await authService.updateAuthService(userSession, params, body);
-    resSend(res, StatusCode.OK, 'update auth', response);
-};
-
-export const deleteAuth = async (req: Request, res: Response) => {
-    const { userSession, params } = req;
-    const response = await authService.deleteAuthService(userSession, params);
+export const forgetPassword = async (req: Request, res: Response) => {
+    const { body } = req;
+    const response = await authService.forgetPasswordService(body);
     resSend(res, StatusCode.OK, 'delete auth', response);
 };
+
+export const resetPassword = async (req: Request, res: Response) => {
+    const { body } = req;
+    const response = await authService.resetPasswordService(body);
+    resSend(res, StatusCode.OK, 'delete auth', response);
+};
+
+export const refreshToken = async (req: Request, res: Response) => {
+    const refreshToken = req.cookies?.refreshToken;
+    if (!refreshToken) throwCustomError('Refresh token missing', StatusCode.UNAUTHORIZED);
+
+    const { accessToken, refreshToken: newRefreshToken } =
+        await authService.refreshTokenService(refreshToken);
+
+    resSend(res, StatusCode.OK, 'Token refreshed', accessToken, {
+        name: 'refreshToken',
+        value: newRefreshToken,
+        options: cookiesOptions,
+    });
+};
+
+export const logout = async (_req: Request, res: Response) => {
+    res.clearCookie('refreshToken', cookiesOptions);
+
+    resSend(res, StatusCode.OK, 'Logout successful');
+};
+
+const cookiesOptions = {
+    httpOnly: true,
+    secure: isProd,
+    sameSite: isProd ? 'strict' : 'lax',
+    path: '/api/auth/refresh-token',
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+} as any;

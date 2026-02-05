@@ -84,4 +84,4 @@ export interface NodeMailerEmailParams {
     }>;
 }
 
-export type CommonServiceResponse = Promise<void | Record<string, any>>;
+export type ServiceResponse<T = void> = Promise<T>;

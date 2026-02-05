@@ -20,3 +20,11 @@ export const DB_DATABASE = process.env.DB_DATABASE;
 
 // SWAGGER
 export const SWAGGER_HOST = process.env.SWAGGER_HOST;
+
+// Mail Config
+export const NODEMAILER_HOST = process.env.NODEMAILER_HOST;
+export const NODEMAILER_USER = process.env.NODEMAILER_USER;
+export const NODEMAILER_PASS = process.env.NODEMAILER_PASS;
+export const NODEMAILER_PORT = Number(process.env.NODEMAILER_PORT) || 587;
+export const NODEMAILER_SECURE = process.env.NODEMAILER_SECURE === 'true';
+export const EMAIL_FROM = process.env.EMAIL_FROM || 'no-reply@example.com';

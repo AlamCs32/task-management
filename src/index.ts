@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { Application } from 'express';
 import morgan from 'morgan';
@@ -33,6 +34,9 @@ app.use(
 
 // Allow app to use json
 app.use(express.json({ limit: '500mb' }));
+
+// Parse cookies
+app.use(cookieParser());
 
 // Log Middleware
 app.use(requestLogger);
