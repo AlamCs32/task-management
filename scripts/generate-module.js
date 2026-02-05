@@ -108,13 +108,13 @@ import Joi from "joi";
 
 const { string, number, any } = Joi.types()
 
-export const get${capitalizeModuleName} = Joi.object({});
+export const get${capitalizeModuleName}Validation = Joi.object({});
 
-export const create${capitalizeModuleName} = Joi.object({});
+export const create${capitalizeModuleName}Validation = Joi.object({});
 
-export const update${capitalizeModuleName} = Joi.object({});
+export const update${capitalizeModuleName}Validation = Joi.object({});
 
-export const delete${capitalizeModuleName} = Joi.object({});
+export const delete${capitalizeModuleName}Validation = Joi.object({});
 `.trim();
 
 const typeTemplate = `

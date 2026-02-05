@@ -30,7 +30,7 @@ const doc = {
     },
 };
 
-const paths = ['./modules/auth/authRoute.ts'];
+const paths = ['./modules/auth/authRoute.ts', './modules/task/taskRoute.ts'];
 
 const outputFile = path.join(__dirname, './swagger-output.json');
 // const endpointsFiles = [path.join(__dirname, './modules/auth/authRoute.ts')];

@@ -13,3 +13,8 @@ export const pagination = (pageNo: number = 1, pageSize: number = 10): IPaginati
         skip: (pageNo - 1) * pageSize,
     };
 };
+
+export const isValidQueryString = (value: string): boolean => {
+    if (value && value.trim() && value.trim() !== '""' && value.trim() !== "''") return true;
+    return false;
+};
