@@ -10,6 +10,7 @@ import { isProd } from '@/utils/helper';
 export const Login = async (req: Request, res: Response) => {
     const { body } = req;
     const { accessToken, refreshToken } = await authService.LoginService(body);
+
     resSend(res, StatusCode.OK, 'Login successfully', accessToken, {
         name: 'refreshToken',
         value: refreshToken,
@@ -30,19 +31,19 @@ export const signup = async (req: Request, res: Response) => {
 export const changePassword = async (req: Request, res: Response) => {
     const { userSession, body } = req;
     const response = await authService.changePasswordService(userSession, body);
-    resSend(res, StatusCode.OK, '', response);
+    resSend(res, StatusCode.OK, 'Password changed successfully', response);
 };
 
 export const forgetPassword = async (req: Request, res: Response) => {
     const { body } = req;
     const response = await authService.forgetPasswordService(body);
-    resSend(res, StatusCode.OK, 'delete auth', response);
+    resSend(res, StatusCode.OK, 'Pls check your email', response);
 };
 
 export const resetPassword = async (req: Request, res: Response) => {
     const { body } = req;
     const response = await authService.resetPasswordService(body);
-    resSend(res, StatusCode.OK, 'delete auth', response);
+    resSend(res, StatusCode.OK, 'Password reset successfully', response);
 };
 
 export const refreshToken = async (req: Request, res: Response) => {
@@ -52,7 +53,7 @@ export const refreshToken = async (req: Request, res: Response) => {
     const { accessToken, refreshToken: newRefreshToken } =
         await authService.refreshTokenService(refreshToken);
 
-    resSend(res, StatusCode.OK, 'Token refreshed', accessToken, {
+    resSend(res, StatusCode.OK, 'Refresh token successfully', accessToken, {
         name: 'refreshToken',
         value: newRefreshToken,
         options: cookiesOptions,
@@ -71,4 +72,4 @@ const cookiesOptions = {
     sameSite: isProd ? 'strict' : 'lax',
     path: '/api/auth/refresh-token',
     maxAge: 7 * 24 * 60 * 60 * 1000,
-} as any;
+} as const;

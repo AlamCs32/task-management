@@ -13,7 +13,7 @@ import { ServiceResponse, StatusCode } from '@/types/common';
 import { UserSessionData } from '@/types/express';
 import { comparePassword } from '@/utils/bcrypt';
 import { throwCustomError } from '@/utils/customeError';
-import { createEntity, updateEntity } from '@/utils/entityHelper';
+import { createEntity } from '@/utils/entityHelper';
 import { UserRole } from '@/utils/enums';
 import { isProd } from '@/utils/helper';
 import {
@@ -75,7 +75,7 @@ export const signupService = async (body: SignupBody): ServiceResponse<LoginSign
         data: {
             username,
             email,
-            password, // auto-hashed
+            password,
             userRole,
         },
     });
@@ -107,11 +107,10 @@ export const changePasswordService = async (
         throwCustomError('Invalid credentials', StatusCode.UNAUTHORIZED);
     }
 
-    await updateEntity({
-        repository: UserRepository,
-        data: { password: newPassword },
-        criteria: { userId: entityId },
-    });
+    // update password
+    user.password = newPassword;
+
+    await UserRepository.save(user);
 
     return;
 };
@@ -119,7 +118,10 @@ export const changePasswordService = async (
 export const forgetPasswordService = async (body: forgetPasswordBody): ServiceResponse => {
     const { email } = body;
 
-    const user = await UserRepository.findOneBy({ email });
+    const user = await UserRepository.findOne({
+        where: { email },
+        relations: { userRole: true },
+    });
     if (!user) {
         throwCustomError('User not found', StatusCode.NOT_FOUND);
     }
@@ -129,26 +131,26 @@ export const forgetPasswordService = async (body: forgetPasswordBody): ServiceRe
     };
     const token = generateAccessToken(tokenPayload, { expiresIn: '5m' });
 
-    const { subject, html } = resetPasswordTemplate({
-        username: user.username,
-        resetLink: `http://localhost:3000/reset-password?token=${token}`,
-        expire: '5 minutes',
-    });
+    // Email integration is not Working just for demo
+    // const { subject, html } = resetPasswordTemplate({
+    //     username: user.username,
+    //     resetLink: `http://localhost:3000/reset-password?token=${token}`,
+    //     expire: '5 minutes',
+    // });
 
-    if (isProd) {
-        await sendEmail({
-            to: user.email,
-            subject,
-            html,
-        });
-    }
+    // if (isProd) {
+    //     await sendEmail({
+    //         to: user.email,
+    //         subject,
+    //         html,
+    //     });
+    // }
 
-    await updateEntity({
-        repository: UserRepository,
-        data: { resetToken: token, resetTokenExpiry: new Date(Date.now() + 5 * 60 * 1000) },
-        criteria: { userId: user.userId },
-    });
+    // update user
+    user.resetToken = token;
+    user.resetTokenExpiry = new Date(Date.now() + 5 * 60 * 1000);
 
+    await UserRepository.save(user);
     return;
 };
 
@@ -171,11 +173,16 @@ export const resetPasswordService = async (body: resetPasswordBody): ServiceResp
         throwCustomError('User not found', StatusCode.NOT_FOUND);
     }
 
-    await updateEntity({
-        repository: UserRepository,
-        data: { password: newPassword, resetToken: null, resetTokenExpiry: null },
-        criteria: { userId: user.userId },
-    });
+    if (!user.resetToken || token !== user.resetToken || user.resetTokenExpiry < new Date()) {
+        throwCustomError('Invalid or expired token', StatusCode.BAD_REQUEST);
+    }
+
+    // update password
+    user.password = newPassword;
+    user.resetToken = null;
+    user.resetTokenExpiry = null;
+
+    await UserRepository.save(user);
 
     return;
 };

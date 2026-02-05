@@ -56,7 +56,7 @@ export class User extends TimeStamptEntity {
 
     @BeforeUpdate()
     async hashPasswordUpdate() {
-        if (!this.password) return;
+        if (!this.password || this.password.startsWith('$2b$')) return;
         this.password = await hashPassword(this.password);
     }
 }
