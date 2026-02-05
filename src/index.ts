@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { Application } from 'express';
+import helmet from 'helmet';
 import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
 
@@ -37,6 +38,9 @@ app.use(express.json({ limit: '500mb' }));
 
 // Parse cookies
 app.use(cookieParser());
+
+// Security Middleware
+app.use(helmet());
 
 // Log Middleware
 app.use(requestLogger);
