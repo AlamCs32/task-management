@@ -1,0 +1,35 @@
+{
+   "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+         "@/*": [
+            "src/*"
+         ]
+      },
+      "target": "ESNext",
+      "module": "NodeNext",
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "outDir": "./dist",
+      "rootDir": "./src",
+      "lib": [
+         "esnext",
+         "es5",
+         "es6"
+      ],
+      "moduleResolution": "NodeNext",
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "sourceMap": true,
+      "resolveJsonModule": true,
+      "strict": false
+   },
+   "include": [
+      "src"
+   ],
+   "exclude": [
+      "node_modules",
+      "dist"
+   ]
+}
